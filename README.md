@@ -26,3 +26,6 @@ Dataset Contents:
 
 
 As a passionate Formula 1 fan who has followed every race since 2020, even attending live events, you aim to combine your enthusiasm for the sport with your desire to learn and practice SQL skills. This dataset provides a rich and diverse foundation for exploring various aspects of Formula 1, allowing you to analyze historical trends, driver and constructor performance, race outcomes, and much more.
+
+
+## Entity Relationship Diagram
