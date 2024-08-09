@@ -2,7 +2,7 @@
 
 This dataset is sourced from Kaggle and was compiled by Rohan Rao. It contains comprehensive data on Formula 1 races, teams, drivers, and circuits spanning from the inception of the World Championship in 1950 up until 2020. The dataset is available at
 
-[ Formula 1 World Championship (1950 - 2024).]([https://8weeksqlchallenge.com](https://www.kaggle.com/datasets/rohanrao/formula-1-world-championship-1950-2020/data)). 
+[Formula 1 World Championship (1950 - 2024)](https://www.kaggle.com/datasets/rohanrao/formula-1-world-championship-1950-2020/data). 
 
 
 Dataset Contents:
@@ -41,32 +41,32 @@ As a passionate Formula 1 fan who has followed every race since 2020, even atten
 
  ```sql
 
-DROP VIEW drivers_positions;
+DROP 
+  VIEW drivers_positions;
+CREATE VIEW drivers_positions AS 
+SELECT 
+  r.raceid AS race_id, 
+  r.circuitid AS circuit_id, 
+  r.year AS year, 
+  r.NAME AS NAME, 
+  re.driverid AS driver_id, 
+  re.constructorid AS constructor_id, 
+  re.positionorder AS finish_position, 
+  re.grid AS start_position, 
+  re.statusid AS status_id, 
+  re.rank AS rank, 
+  d.forename || ' ' || d.surname AS driver, 
+  d.nationality AS nationality 
+FROM 
+  races AS r 
+  LEFT JOIN results AS re ON re.raceid = r.raceid 
+  LEFT JOIN drivers AS d ON d.driverid = re.driverid;
 
-CREATE VIEW drivers_positions
-AS
-  SELECT r.raceid         AS race_id,
-         r.circuitid      AS circuit_id,
-         r.year           AS year,
-         r.NAME           AS NAME,
-         re.driverid      AS driver_id,
-         re.constructorid AS constructor_id,
-         re.positionorder AS finish_position,
-         re.grid          AS start_position,
-         re.statusid      AS status_id,
-         re.rank          AS rank,
-         d.forename
-         || ' '
-         || d.surname     AS driver,
-         d.nationality    AS nationality
-  FROM   races AS r
-         LEFT JOIN results AS re
-                ON re.raceid = r.raceid
-         LEFT JOIN drivers AS d
-                ON d.driverid = re.driverid;
+SELECT * FROM drivers_positions;
+
 
 ```
-
+![obraz](https://github.com/user-attachments/assets/ecfd35cd-f574-4f95-bb14-45df67992c4f)
 
 -------------
 
@@ -91,6 +91,7 @@ OFFSET   200
 FETCH next 20 rows only;
 ```
 
+![obraz](https://github.com/user-attachments/assets/fadceb45-4412-4eca-843a-83e357702151)
 
 
 -------------
@@ -101,26 +102,34 @@ Calculates the percentage of wins out of total races finished for drivers with a
 
  ```sql
 
-SELECT driver,
-       Sum (CASE
-              WHEN finish_position = 1 THEN 1
-              ELSE 0
-            END)                                                      AS
-       number_of_wins,
-       COUNT(*)                                                       AS
-       total_finished,
-       Round(( Sum (CASE
-                      WHEN finish_position = 1 THEN 1
-                      ELSE 0
-                    END) :: numeric / COUNT(*) :: numeric ) * 100, 2) AS
-       percentage_wins
-FROM   drivers_positions
-WHERE  status_id IN ( 1, 11, 12, 13 )
-GROUP  BY driver
-HAVING COUNT(*) >= 4
-ORDER  BY percentage_wins desc
-FETCH FIRST 20 ROWS ONLY; 
+SELECT 
+  driver, 
+  SUM (
+    CASE WHEN finish_position = 1 THEN 1 ELSE 0 END
+  ) AS number_of_wins, 
+  COUNT(*) AS total_finished, 
+  ROUND(
+    (
+      SUM (
+        CASE WHEN finish_position = 1 THEN 1 ELSE 0 END
+      ):: NUMERIC / COUNT(*):: NUMERIC
+    )* 100, 
+    2
+  ) AS percentage_wins 
+FROM 
+  drivers_positions 
+WHERE 
+  status_id IN (1, 11, 12, 13) 
+GROUP BY 
+  driver 
+HAVING 
+  COUNT(*) >= 4 
+ORDER BY 
+  percentage_wins DESC FETCH FIRST 20 ROWS ONLY;
+
 ```
+
+![obraz](https://github.com/user-attachments/assets/55365e0d-4ece-4590-82e1-a823ef0850a0)
 
 
 -------------
@@ -131,17 +140,26 @@ Lists drivers with the most race wins, applying a dense rank to handle ties and 
 
  ```sql
 
-SELECT driver                      AS driver,
-       COUNT(*)                    AS wins_total,
-       DENSE_RANK()
-         OVER (
-           ORDER BY COUNT(*) desc) AS ranking
-FROM   drivers_positions
-WHERE  finish_position = 1
-GROUP  BY driver
-ORDER  BY COUNT(*) desc
-FETCH FIRST 25 ROWS only; 
+SELECT 
+  driver AS driver, 
+  COUNT(*) AS wins_total, 
+  DENSE_RANK() OVER (
+    ORDER BY 
+      COUNT(*) DESC
+  ) AS ranking 
+FROM 
+  drivers_positions 
+WHERE 
+  finish_position = 1 
+GROUP BY 
+  driver 
+ORDER BY 
+  COUNT(*) DESC FETCH FIRST 25 ROWS ONLY;
+
 ```
+
+
+![obraz](https://github.com/user-attachments/assets/5b88ea9f-0ee3-4dff-bb0a-ebdb8f3ab2ed)
 
 -------------
 
@@ -150,18 +168,27 @@ FETCH FIRST 25 ROWS only;
 Identifies drivers with the most podium finishes (1st, 2nd, or 3rd place) and ranks them, showing the top 25.
 
  ```sql
-SELECT driver                      AS driver,
-       COUNT(*)                    AS podiums,
-       DENSE_RANK()
-         OVER (
-           ORDER BY COUNT(*) desc) AS rankingD
-FROM   drivers_positions
-WHERE  finish_position IN ( 1, 2, 3 )
-GROUP  BY driver
-ORDER  BY COUNT(*) desc
-FETCH first 25 ROWS only; 
+SELECT 
+  driver AS driver, 
+  COUNT(*) AS podiums, 
+  DENSE_RANK() OVER (
+    ORDER BY 
+      COUNT(*) desc
+  ) AS rankingD 
+FROM 
+  drivers_positions 
+WHERE 
+  finish_position IN (1, 2, 3) 
+GROUP BY 
+  driver 
+ORDER BY 
+  COUNT(*) desc FETCH first 25 ROWS only;
+
 ```
--------------
+
+
+![obraz](https://github.com/user-attachments/assets/a389f6e9-8181-4627-8751-2845637a3e73)
+
 
 
 -------------
@@ -171,41 +198,51 @@ FETCH first 25 ROWS only;
 Adjusts the constructor championship totals for McLaren and Ferrari based on the 2007 season because McLaren was disqualified from constructor championship that year 
 
  ```sql
-SELECT team_name,
-       CASE
-         WHEN team_name = 'McLaren' THEN total_championship - 1
-         WHEN team_name = 'Ferrari' THEN total_championship + 1
-         ELSE total_championship
-       END AS constructor_championship
-FROM   (SELECT team_name,
-               Sum(CASE
-                     WHEN ranking = 1 THEN 1
-                     ELSE 0
-                   END) AS total_championship
-        FROM   (SELECT r.year                            AS year,
-                       c.NAME                            AS team_name,
-                       Max(cs.points)                    AS points,
-                       Rank()
-                         OVER (
-                           partition BY r.year
-                           ORDER BY Max(cs.points) DESC) AS ranking
-                FROM   constructor_standings AS cs
-                       LEFT JOIN constructors AS c
-                              ON c.constructorid = cs.constructorid
-                       LEFT JOIN races AS r
-                              ON r.raceid = cs.raceid
-                GROUP  BY c.NAME,
-                          r.year
-                ORDER  BY r.year) AS sub
-        GROUP  BY team_name
-        ORDER  BY total_championship DESC) AS sub2
-ORDER  BY constructor_championship DESC; 
+SELECT 
+  team_name, 
+  CASE WHEN team_name = 'McLaren' THEN total_championship - 1 WHEN team_name = 'Ferrari' THEN total_championship + 1 ELSE total_championship END AS constructor_championship 
+FROM 
+  (
+    SELECT 
+      team_name, 
+      Sum(CASE WHEN ranking = 1 THEN 1 ELSE 0 END) AS total_championship 
+    FROM 
+      (
+        SELECT 
+          r.year AS year, 
+          c.NAME AS team_name, 
+          Max(cs.points) AS points, 
+          Rank() OVER (
+            partition BY r.year 
+            ORDER BY 
+              Max(cs.points) DESC
+          ) AS ranking 
+        FROM 
+          constructor_standings AS cs 
+          LEFT JOIN constructors AS c ON c.constructorid = cs.constructorid 
+          LEFT JOIN races AS r ON r.raceid = cs.raceid 
+        GROUP BY 
+          c.NAME, 
+          r.year 
+        ORDER BY 
+          r.year
+      ) AS sub 
+    GROUP BY 
+      team_name 
+    ORDER BY 
+      total_championship DESC
+  ) AS sub2 
+ORDER BY 
+  constructor_championship DESC;
+
 ```
+
+![obraz](https://github.com/user-attachments/assets/3b1486c8-9840-4180-9e23-db083ad58c6a)
 -------------
 
 
 #### 7. Race Wins by Driver and Win Percentage (year):
-For each driver, it calculates the total wins and win percentage for each season, along with pole positions, considering drivers who participated in at least 60% of the season's races.
+For each driver, it calculates the total wins and win percentage for each season, along with pole positions, considering drivers who participated in at least 50% of the season's races.
 
  ```sql
 SELECT driver,
@@ -239,6 +276,8 @@ HAVING Count(*) >= 0.5 * (SELECT Count(DISTINCT race_id)
 ORDER  BY wins_percentage_by_season DESC; 
 
 ```
+
+![obraz](https://github.com/user-attachments/assets/42169cd0-19de-4083-addb-0c1bcbda181c)
 -------------
 
 #### 8. Most Successful Driver by Country:
