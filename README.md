@@ -300,6 +300,8 @@ WHERE  ranking = 1
 ORDER  BY wins DESC; 
 
 ```
+
+![obraz](https://github.com/user-attachments/assets/5ce161c6-cf48-416b-a791-6d08324cef55)
 -------------
 
 #### 9. Most Successful Nations:
@@ -331,9 +333,9 @@ ORDER BY first_place DESC,
          second_place DESC,
          total DESC;
 
-
-
 ```
+
+![obraz](https://github.com/user-attachments/assets/ae9afe0c-f57f-4149-b565-2c5ed811eab2)
 -------------
 
 #### 10. Drivers Who Won a Grand Prix (Top 5 Countries):
@@ -360,6 +362,10 @@ GROUP BY sub.nationality
 ORDER BY wins DESC offset 0FETCH first 5 rows only;
 
 ```
+
+![obraz](https://github.com/user-attachments/assets/99b0e7dc-736a-4965-9c44-46c056a292ba)
+
+
 -------------
 
 
@@ -384,6 +390,9 @@ ORDER  BY nationality,
           wins DESC; 
 
 ```
+
+![obraz](https://github.com/user-attachments/assets/ac48194b-ed13-46ac-a475-5985685a17f0)
+
 -------------
 
 
@@ -403,6 +412,9 @@ GROUP  BY driver
 ORDER  BY Count(*) DESC; 
 
 ```
+
+![obraz](https://github.com/user-attachments/assets/1a1b8bfe-4169-4aed-b03f-5c337d958f4a)
+
 -------------
 
 #### 13. Drivers with Most Races without a Podium:
@@ -421,6 +433,8 @@ GROUP  BY driver
 ORDER  BY Count(*) DESC; 
 
 ```
+
+![obraz](https://github.com/user-attachments/assets/e1960744-ab42-4dd4-8e12-71d4d62e589b)
 -------------
 
 
@@ -463,6 +477,8 @@ WHERE  races_total > 7
 ORDER  BY races_did_not_finish DESC; 
 
 ```
+
+![obraz](https://github.com/user-attachments/assets/85dfb744-2d1f-4a00-8310-811ca068e69e)
 -------------
 
 
@@ -497,6 +513,9 @@ ORDER  BY pole_to_win DESC;
 
 
 ```
+
+![obraz](https://github.com/user-attachments/assets/793e74c9-ec7f-46ad-a211-bdd4783df05e)
+
 -------------
 
 
@@ -516,6 +535,9 @@ FETCH first 25 ROWS only;
 
 
 ```
+
+![obraz](https://github.com/user-attachments/assets/eeccdbc0-0645-4250-9f9c-89c0ffd4b716)
+
 -------------
 
 
@@ -536,6 +558,9 @@ ORDER  BY wins DESC;
 
 
 ```
+
+![obraz](https://github.com/user-attachments/assets/30cf5f3b-8a11-4fec-bf17-5657890ed404)
+
 -------------
 
 
@@ -589,6 +614,8 @@ ORDER BY   wins DESC,
 
 
 ```
+
+![obraz](https://github.com/user-attachments/assets/1aa1e733-c0ed-4ef4-b9a9-84d451cb0326)
 -------------
 
 
@@ -641,6 +668,10 @@ ORDER BY   wins DESC,
 
 
 ```
+
+![obraz](https://github.com/user-attachments/assets/60872135-1698-4504-8e11-103739615165)
+
+
 -------------
 
 
@@ -701,6 +732,9 @@ FROM
 
 
 ```
+
+![obraz](https://github.com/user-attachments/assets/4cbc8c57-8e39-42be-b486-dfaae424006d)
+
 -------------
 
 
@@ -733,7 +767,9 @@ ORDER BY
 
 
 ```
+![obraz](https://github.com/user-attachments/assets/bd5b16ac-b047-420a-8ef9-0eba9099eb53)
 
+-------------
 With crosstab
 
 
@@ -782,6 +818,9 @@ ORDER BY
 
 
 ```
+
+![obraz](https://github.com/user-attachments/assets/04cd22d0-0334-4308-a8d9-1cbebdc35fb4)
+
 -------------
 
 
@@ -827,6 +866,11 @@ FROM
   ) AS SUB
 
 ```
+
+![obraz](https://github.com/user-attachments/assets/53f94976-27ff-4fa6-9bcb-97e4d21a18ff)
+
+-------------
+
 
 
 With crosstab
@@ -906,6 +950,9 @@ ORDER BY
 
 
 ```
+
+![obraz](https://github.com/user-attachments/assets/1f9739b9-8669-4c53-9dba-a6d01aebfb1a)
+
 -------------
 
 
